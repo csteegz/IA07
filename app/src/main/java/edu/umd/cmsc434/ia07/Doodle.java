@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import com.chiralcode.colorpicker.ColorPickerDialog;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,39 +16,53 @@ public class Doodle extends AppCompatActivity implements View.OnClickListener{
 
     private float smallBrush,mediumBrush,largeBrush;
     private Button drawBtn,clearBtn;
+    private ImageButton colorBtn;
     private DrawingView drawingView;
+    private ColorPickerDialog colorPickerDialog;
+    int curr_color;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doodle);
+        curr_color = R.color.colorPrimary;
         drawingView = (DrawingView)findViewById(R.id.canvas_view);
         smallBrush = getResources().getInteger(R.integer.small_size);
         mediumBrush = getResources().getInteger(R.integer.medium_size);
         largeBrush = getResources().getInteger(R.integer.large_size);
         drawBtn = (Button)findViewById(R.id.brush_btn);
         drawBtn.setOnClickListener(this);
-        clearBtn = (Button)findViewById(R.id.new_btn);
+        clearBtn = (Button)findViewById(R.id.clear_btn);
         clearBtn.setOnClickListener(this);
+        colorBtn = (ImageButton)findViewById(R.id.color_btn);
+        colorBtn.setOnClickListener(this);
+
+        drawingView.setColor(curr_color);
+        colorBtn.setBackgroundColor(curr_color);
         drawingView.setBrushSize(mediumBrush);
-    }
 
-    public void paintClicked(View view) {
-        ImageButton button = (ImageButton)view;
-        String color = view.getTag().toString();
-        drawingView.setColor(color);
-    }
+        colorPickerDialog = new ColorPickerDialog(this, curr_color, new ColorPickerDialog.OnColorSelectedListener() {
+            @Override
+            public void onColorSelected(int color) {
+                drawingView.setColor(color);
+                colorBtn.setBackgroundColor(color);
+                colorPickerDialog.dismiss();
+            }
+        });
 
+    }
 
     @Override
     public void onClick(View v) {
        switch (v.getId()){
+           case R.id.color_btn:
+               colorPickerDialog.show();
+               break;
            case R.id.brush_btn:
-               //Brush Size button clicked
                Dialog brushDialog = setupBrushDialog();
                brushDialog.show();
                break;
-           case R.id.new_btn:
-               //Clear Button Clicked;
+           case R.id.clear_btn:
+               drawingView.clear();
                break;
            default:
               //should be unreachable
