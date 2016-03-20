@@ -31,11 +31,13 @@ public class Doodle extends AppCompatActivity implements View.OnClickListener{
         largeBrush = getResources().getInteger(R.integer.large_size);
         drawBtn = (Button)findViewById(R.id.brush_btn);
         drawBtn.setOnClickListener(this);
-        clearBtn = (Button)findViewById(R.id.new_btn);
+        clearBtn = (Button)findViewById(R.id.clear_btn);
         clearBtn.setOnClickListener(this);
         colorBtn = (ImageButton)findViewById(R.id.color_btn);
         colorBtn.setOnClickListener(this);
+
         drawingView.setColor(curr_color);
+        colorBtn.setBackgroundColor(curr_color);
         drawingView.setBrushSize(mediumBrush);
 
         colorPickerDialog = new ColorPickerDialog(this, curr_color, new ColorPickerDialog.OnColorSelectedListener() {
@@ -59,8 +61,8 @@ public class Doodle extends AppCompatActivity implements View.OnClickListener{
                Dialog brushDialog = setupBrushDialog();
                brushDialog.show();
                break;
-           case R.id.new_btn:
-               //Clear Button Clicked;
+           case R.id.clear_btn:
+               drawingView.clear();
                break;
            default:
               //should be unreachable

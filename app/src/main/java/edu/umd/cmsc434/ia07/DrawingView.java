@@ -22,7 +22,7 @@ public class DrawingView extends View {
 
     private Paint _paintDoodle = new Paint();
     private Path _path = new Path();
-    private int _color = android.graphics.Color.BLACK;
+    private int _color = R.color.colorPrimary;
     private float _brushSize , _storedSize;
 
     //Stuff for dithering
