@@ -3,7 +3,7 @@
     <item>
         <shape android:shape="rectangle" >
             <stroke
-                android:width="4dp"
+                android:width="8dp"
                 android:color="#FF999999" />
             <solid android:color="#00000000" />
             <padding
@@ -16,10 +16,10 @@
     <item>
         <shape xmlns:android="http://schemas.android.com/apk/res/android" >
             <stroke
-                android:width="4dp"
+                android:width="8dp"
                 android:color="#FF999999" />
             <solid android:color="#00000000" />
-            <corners android:radius="10dp" />
+            <corners android:radius="20dp" />
         </shape>
     </item>
 </layer-list>

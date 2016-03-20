@@ -59,15 +59,17 @@ public class DrawingView extends View {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        _canvasBitmap = Bitmap.createBitmap(w,h, Bitmap.Config.ARGB_8888);
-        _canvas = new Canvas(_canvasBitmap);
+        if (w >0 && h > 0) {
+            _canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+            _canvas = new Canvas(_canvasBitmap);
+        }
     }
 
     @Override
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        canvas.drawBitmap(_canvasBitmap,0,0, _canvasPaint);
+        canvas.drawBitmap(_canvasBitmap, 0, 0, _canvasPaint);
         canvas.drawPath(_path,_paintDoodle);
     }
 
@@ -103,9 +105,8 @@ public class DrawingView extends View {
     }
 
     public void setBrushSize(float newSize){
-        float pixelAmount = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+        _brushSize= TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 newSize, getResources().getDisplayMetrics());
-        _brushSize=pixelAmount;
         _paintDoodle.setStrokeWidth(_brushSize);
         storeBrushSize(_brushSize);
     }
@@ -121,5 +122,11 @@ public class DrawingView extends View {
     public void clear(){
         _canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         invalidate();
+    }
+
+    public void setColor(int newColor) {
+        invalidate();
+        _color = newColor;
+        _paintDoodle.setColor(_color);
     }
 }
