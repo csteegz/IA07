@@ -73,6 +73,21 @@
                 android:layout_marginTop="@dimen/margin_space"
                 />
 
+            <ToggleButton
+                style="@style/AppTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textOff="@string/erase"
+                android:textOn="@string/paint"
+                android:id="@+id/erase_btn"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="@dimen/margin_space"
+                android:layout_marginBottom="@dimen/margin_space"
+                />
+
+
         </RelativeLayout>
 
     </LinearLayout>

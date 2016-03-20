@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 import android.util.AttributeSet;
@@ -70,7 +71,7 @@ public class DrawingView extends View {
         super.onDraw(canvas);
 
         canvas.drawBitmap(_canvasBitmap, 0, 0, _canvasPaint);
-        canvas.drawPath(_path,_paintDoodle);
+        canvas.drawPath(_path, _paintDoodle);
     }
 
 
@@ -108,15 +109,6 @@ public class DrawingView extends View {
         _brushSize= TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 newSize, getResources().getDisplayMetrics());
         _paintDoodle.setStrokeWidth(_brushSize);
-        storeBrushSize(_brushSize);
-    }
-
-    public void storeBrushSize(float storeSize){
-        _storedSize = storeSize;
-    }
-
-    public float retrieveSize(){
-        return _storedSize;
     }
 
     public void clear(){
@@ -129,4 +121,13 @@ public class DrawingView extends View {
         _color = newColor;
         _paintDoodle.setColor(_color);
     }
+
+    public void enableErase(){
+        _paintDoodle.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+    }
+
+    public void disableErase(){
+        _paintDoodle.setXfermode(null);
+    }
+
 }

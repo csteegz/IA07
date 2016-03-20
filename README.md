@@ -8,3 +8,5 @@ http://code.tutsplus.com/series/create-a-drawing-app-on-android--cms-704
 Also Uses 
 
 https://github.com/chiralcode/Android-Color-Picker/
+
+I also consulted the android developers guide and stack overflow.

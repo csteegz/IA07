@@ -5,7 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.ToggleButton;
 
 import com.chiralcode.colorpicker.ColorPickerDialog;
 
@@ -49,7 +51,22 @@ public class Doodle extends AppCompatActivity implements View.OnClickListener{
             }
         });
 
+        ToggleButton toggle = (ToggleButton) findViewById(R.id.erase_btn);
+        toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    // The toggle is enabled
+                    drawingView.enableErase();
+                } else {
+                    // The toggle is disabled
+                    drawingView.disableErase();
+                }
+            }
+        });
     }
+
+
+
 
     @Override
     public void onClick(View v) {
