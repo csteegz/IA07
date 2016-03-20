@@ -35,6 +35,7 @@ public class Doodle extends AppCompatActivity implements View.OnClickListener{
         clearBtn.setOnClickListener(this);
         colorBtn = (ImageButton)findViewById(R.id.color_btn);
         colorBtn.setOnClickListener(this);
+
         drawingView.setColor(curr_color);
         drawingView.setBrushSize(mediumBrush);
 
