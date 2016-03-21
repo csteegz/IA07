@@ -1,18 +1,27 @@
 package edu.umd.cmsc434.ia07;
 
 import android.app.Dialog;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.chiralcode.colorpicker.ColorPickerDialog;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.widget.Toast.makeText;
 
 public class Doodle extends AppCompatActivity implements View.OnClickListener{
 
@@ -20,13 +29,14 @@ public class Doodle extends AppCompatActivity implements View.OnClickListener{
     private Button drawBtn,clearBtn;
     private ImageButton colorBtn;
     private DrawingView drawingView;
+    private Dialog brushDialog;
     private ColorPickerDialog colorPickerDialog;
     int curr_color;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_doodle);
-        curr_color = R.color.colorPrimary;
+        curr_color = ContextCompat.getColor(this, R.color.colorPrimary);
         drawingView = (DrawingView)findViewById(R.id.canvas_view);
         smallBrush = getResources().getInteger(R.integer.small_size);
         mediumBrush = getResources().getInteger(R.integer.medium_size);
@@ -41,6 +51,8 @@ public class Doodle extends AppCompatActivity implements View.OnClickListener{
         drawingView.setColor(curr_color);
         colorBtn.setBackgroundColor(curr_color);
         drawingView.setBrushSize(mediumBrush);
+
+        brushDialog = setupBrushDialog();
 
         colorPickerDialog = new ColorPickerDialog(this, curr_color, new ColorPickerDialog.OnColorSelectedListener() {
             @Override
@@ -63,6 +75,21 @@ public class Doodle extends AppCompatActivity implements View.OnClickListener{
                 }
             }
         });
+        ToggleButton trace = (ToggleButton) findViewById(R.id.trace_btn);
+        toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                 InputStream image = null;
+                    if (!displayTraceImage(image)){
+                        makeText(getApplicationContext(), "Couldn't Load to Trace", Toast.LENGTH_LONG).show();
+                        buttonView.setChecked(false);
+                    }
+                }else{
+                    hideTraceImage();
+                }
+            }
+        });
     }
 
 
@@ -75,7 +102,6 @@ public class Doodle extends AppCompatActivity implements View.OnClickListener{
                colorPickerDialog.show();
                break;
            case R.id.brush_btn:
-               Dialog brushDialog = setupBrushDialog();
                brushDialog.show();
                break;
            case R.id.clear_btn:
@@ -119,5 +145,21 @@ public class Doodle extends AppCompatActivity implements View.OnClickListener{
             brushDialog.findViewById(id).setOnClickListener(brushListener);
         }
         return brushDialog;
+    }
+
+    public boolean displayTraceImage(InputStream stream){
+        if (stream == null) return false;
+        ImageView imageView = (ImageView) findViewById(R.id.image_view);
+        Bitmap image = BitmapFactory.decodeStream(stream);
+        imageView.setImageBitmap(image);
+        drawingView.setBackgroundColor(Color.TRANSPARENT);
+        return true;
+    }
+
+    public void hideTraceImage(){
+        drawingView.setBackgroundColor(Color.WHITE);
+        ImageView imageView = (ImageView) findViewById(R.id.image_view);
+        //Not sure how setImageBitmap works with null, uri claims to clear in that case
+        imageView.setImageURI(null);
     }
 }

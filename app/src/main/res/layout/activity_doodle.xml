@@ -36,12 +36,35 @@
                 android:layout_height="wrap_content"
                 android:text="@string/save"
                 android:id="@+id/save_btn" />
+
+            <Button
+                style="@style/AppTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/load"
+                android:id="@+id/load_btn" />
+
+            <ToggleButton
+                style="@style/AppTheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textOff="@string/trace"
+                android:textOn="@string/stop_trace"
+                android:id="@+id/trace_btn" />
+
         </LinearLayout>
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/image_view"
+                android:contentDescription="@string/tracing_image"
+                android:layout_centerInParent="true" />
 
             <edu.umd.cmsc434.ia07.DrawingView
                 android:layout_width="fill_parent"

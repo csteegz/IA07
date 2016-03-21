@@ -9,4 +9,8 @@
     <string name="med" > Medium </string>
     <string name="sml" > Small </string>
     <string name="paint">Paint</string>
+    <string name="load">Load</string>
+    <string name="trace">Trace</string>
+    <string name="tracing_image">TracingImage</string>
+    <string name="stop_trace">Stop Tracing</string>
 </resources>
