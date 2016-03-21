@@ -130,4 +130,7 @@ public class DrawingView extends View {
         _paintDoodle.setXfermode(null);
     }
 
+    public void setOpacity(int opacity) {
+        _paintDoodle.setAlpha((opacity * 255) / 100);
+    }
 }

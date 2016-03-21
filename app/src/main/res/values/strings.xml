@@ -13,4 +13,5 @@
     <string name="trace">Trace</string>
     <string name="tracing_image">TracingImage</string>
     <string name="stop_trace">Stop Tracing</string>
+    <string name="brush_size">Brush Size</string>
 </resources>

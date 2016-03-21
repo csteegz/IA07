@@ -8,6 +8,6 @@
     <dimen name="large_brush">30dp</dimen>
     <integer name="medium_size">20</integer>
     <integer name = "large_size">30</integer>
-    <dimen name = "brush_button_size"> 70dp </dimen>
+    <dimen name = "brush_button_size"> 50dp </dimen>
     <dimen name = "margin_space"> 32dp </dimen>
 </resources>

@@ -1,26 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal" android:layout_width="match_parent"
+    android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center">
-    <ImageButton
-        android:id="@+id/small_brush"
-        android:layout_width="@dimen/brush_button_size"
-        android:layout_height="@dimen/brush_button_size"
-        android:contentDescription="@string/sml"
-        android:src="@drawable/small" />
 
-    <ImageButton
-        android:id="@+id/medium_brush"
-        android:layout_width="@dimen/brush_button_size"
-        android:layout_height="@dimen/brush_button_size"
-        android:contentDescription="@string/med"
+<!--
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/brush"
+        android:layout_gravity="center"
         android:src="@drawable/medium" />
+-->
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_margin="32dp">
 
-    <ImageButton
-        android:id="@+id/large_brush"
-        android:layout_width="@dimen/brush_button_size"
-        android:layout_height="@dimen/brush_button_size"
-        android:contentDescription="@string/lrg"
-        android:src="@drawable/large" />
+        <ImageButton
+            android:id="@+id/small_brush"
+            android:layout_width="@dimen/brush_button_size"
+            android:layout_height="@dimen/brush_button_size"
+            android:contentDescription="@string/sml"
+            android:src="@drawable/small"
+            android:layout_gravity="center_vertical|left"
+            android:layout_alignParentStart="true"
+            android:background="#00ffffff" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/brush_size"
+            android:id="@+id/textView"
+            android:layout_centerInParent="true" />
+
+        <ImageButton
+            android:id="@+id/large_brush"
+            android:layout_width="@dimen/brush_button_size"
+            android:layout_height="@dimen/brush_button_size"
+            android:contentDescription="@string/lrg"
+            android:src="@drawable/large"
+            android:layout_gravity="center_vertical|right"
+            android:layout_alignParentEnd="true"
+            android:background="#00ffffff" />
+
+    </RelativeLayout>
+
+    <SeekBar
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/brush_seek_bar"
+        android:layout_gravity="top"
+        android:progress="50"
+        style="@style/AppTheme"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp" />
+
+    <RelativeLayout
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_margin="32dp">
+
+        <TextView
+            android:id="@+id/clear_text"
+            android:layout_width="@dimen/brush_button_size"
+            android:layout_height="@dimen/brush_button_size"
+            android:text="0% Opacity"
+            android:layout_gravity="center_vertical|left"
+            android:layout_alignParentStart="true"
+            android:background="#00ffffff" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Opacity"
+            android:id="@+id/Opacity"
+            android:layout_centerInParent="true" />
+
+        <TextView
+            android:id="@+id/complete_text"
+            android:layout_width="@dimen/brush_button_size"
+            android:layout_height="@dimen/brush_button_size"
+            android:text="100% Opacity"
+            android:layout_gravity="center_vertical|right"
+            android:layout_alignParentEnd="true"
+            android:background="#00ffffff" />
+
+    </RelativeLayout>
+
+    <SeekBar
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/opacity_seek_bar"
+        android:layout_gravity="top"
+        style="@style/AppTheme"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:progress="100"/>
 </LinearLayout>
