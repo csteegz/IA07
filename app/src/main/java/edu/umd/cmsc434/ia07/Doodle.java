@@ -3,10 +3,13 @@ package edu.umd.cmsc434.ia07;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +25,7 @@ import android.widget.ToggleButton;
 
 import com.chiralcode.colorpicker.ColorPickerDialog;
 
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +35,9 @@ import static android.widget.Toast.makeText;
 
 public class Doodle extends AppCompatActivity implements View.OnClickListener{
 
+    private static final int LOAD_PHOTO = 101;
+    private static final int TRACE_PHOTO = 102;
+
     private float smallBrush,mediumBrush,largeBrush;
     private Button drawBtn,clearBtn,saveBtn,loadBtn;
     private ImageButton colorBtn;
@@ -38,6 +45,7 @@ public class Doodle extends AppCompatActivity implements View.OnClickListener{
     private Dialog brushDialog;
     private ColorPickerDialog colorPickerDialog;
     int curr_color;
+    private Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,15 +99,14 @@ public class Doodle extends AppCompatActivity implements View.OnClickListener{
             }
         });
         ToggleButton trace = (ToggleButton) findViewById(R.id.trace_btn);
+
+        photoPickerIntent.setType("image/*");
+
         trace.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
-                 InputStream image = getInputStreamFromGallery();
-                    if (!displayTraceImage(image)){
-                        makeText(getApplicationContext(), "Couldn't Load to Trace", Toast.LENGTH_LONG).show();
-                        buttonView.setChecked(false);
-                    }
+                    startActivityForResult(photoPickerIntent,TRACE_PHOTO);
                 }else{
                     hideTraceImage();
                 }
@@ -107,9 +114,6 @@ public class Doodle extends AppCompatActivity implements View.OnClickListener{
         });
     }
 
-    private InputStream getInputStreamFromGallery() {
-        return null;
-    }
 
 
     @Override
@@ -125,10 +129,7 @@ public class Doodle extends AppCompatActivity implements View.OnClickListener{
                drawingView.clear();
                break;
            case R.id.load_btn:
-               InputStream img = getInputStreamFromGallery();
-               if(!loadCanvas(img)){
-                   makeText(getApplicationContext(), "Couldn't Load", Toast.LENGTH_LONG).show();
-               }
+               startActivityForResult(photoPickerIntent,LOAD_PHOTO);
                break;
            case R.id.save_btn:
                saveCanvas();
@@ -197,7 +198,7 @@ public class Doodle extends AppCompatActivity implements View.OnClickListener{
         ImageView imageView = (ImageView) findViewById(R.id.image_view);
         Bitmap image = BitmapFactory.decodeStream(stream);
         imageView.setImageBitmap(image);
-        drawingView.setBackgroundColor(Color.TRANSPARENT);
+        drawingView.setBackgroundColor(0x00ffffff);
         return true;
     }
 
@@ -212,18 +213,17 @@ public class Doodle extends AppCompatActivity implements View.OnClickListener{
         AlertDialog.Builder saveDialog = new AlertDialog.Builder(this);
         saveDialog.setTitle("Save drawing");
         saveDialog.setMessage("Save drawing to device Gallery?");
-        saveDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener(){
-            public void onClick(DialogInterface dialog, int which){
+        saveDialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
                 drawingView.setDrawingCacheEnabled(true);
                 String imgSaved = MediaStore.Images.Media.insertImage(
                         getContentResolver(), drawingView.getDrawingCache(),
-                        UUID.randomUUID().toString()+".png", "drawing");
-                if(imgSaved!=null){
+                        UUID.randomUUID().toString() + ".png", "drawing");
+                if (imgSaved != null) {
                     Toast savedToast = Toast.makeText(getApplicationContext(),
                             "Drawing saved to Gallery!", Toast.LENGTH_SHORT);
                     savedToast.show();
-                }
-                else{
+                } else {
                     Toast unsavedToast = Toast.makeText(getApplicationContext(),
                             "Oops! Image could not be saved.", Toast.LENGTH_SHORT);
                     unsavedToast.show();
@@ -239,8 +239,43 @@ public class Doodle extends AppCompatActivity implements View.OnClickListener{
         saveDialog.show();
     }
 
+
+    protected void onActivityResult(int requestCode, int resultCode,
+                                    Intent imageReturnedIntent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
+
+        switch(requestCode) {
+            case LOAD_PHOTO:
+                if(resultCode == RESULT_OK){
+                    try {
+                        loadCanvas(getContentResolver().openInputStream(imageReturnedIntent.getData()));
+                    } catch (FileNotFoundException e) {
+                       Toast.makeText(getApplicationContext(),"Couldn't Load Image",Toast.LENGTH_SHORT).show();
+                    }
+                } else{
+                    Toast.makeText(getApplicationContext(),"Couldn't Load Image",Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case TRACE_PHOTO:
+                if(resultCode == RESULT_OK){
+                    try {
+                        displayTraceImage(getContentResolver().openInputStream(imageReturnedIntent.getData()));
+                    } catch (FileNotFoundException e) {
+                        Toast.makeText(getApplicationContext(),"Couldn't Load Image",Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(),"Couldn't Load Image",Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                Toast.makeText(getApplicationContext(),"Something is fucked",Toast.LENGTH_LONG).show();
+        }
+    }
+
+
     public boolean loadCanvas(InputStream img){
-        //TODO: Make work.
-        return img != null;
+        if (img == null) return false;
+        drawingView.loadCanvas(img);
+        return true;
     }
 }

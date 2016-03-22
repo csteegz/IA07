@@ -1,8 +1,10 @@
 package edu.umd.cmsc434.ia07;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -10,11 +12,15 @@ import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.support.annotation.NonNull;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
+
+import java.io.InputStream;
 
 /**
  * TODO: document your custom view class.
@@ -132,5 +138,17 @@ public class DrawingView extends View {
 
     public void setOpacity(int opacity) {
         _paintDoodle.setAlpha((opacity * 255) / 100);
+    }
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
+    public void loadCanvas(InputStream img) {
+        BitmapFactory.Options os = new BitmapFactory.Options();
+        os.outWidth = _canvasBitmap.getWidth();
+        os.outHeight = _canvasBitmap.getHeight();
+        os.inMutable = true;
+        _canvasBitmap = BitmapFactory.decodeStream(img,null,os);
+        _canvasBitmap.setConfig(Bitmap.Config.ARGB_8888);
+        _canvas = new Canvas(_canvasBitmap);
+        invalidate();
     }
 }
